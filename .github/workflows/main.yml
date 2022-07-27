@@ -46,8 +46,9 @@ jobs:
         id: CodeOwnersParser
         shell: pwsh
         run: |
-          $output = & ${{ github.workspace }}/tools/TestConsoleApp/TestConsoleApp/bin/Release/net6.0/TestConsoleApp
-          echo "::set-output name=owners::'Notifying code owners: tzertze'"
+          $output = & ${{ github.workspace }}/tools/TestConsoleApp/TestConsoleApp/bin/Release/net6.0/TestConsoleApp > output.txt
+          $reportData = (Get-Content ${{ github.workspace }}/output.txt)
+          echo "::set-output name=owners::'Notifying code owners: ${reportData}'"
         continue-on-error: false
 
       - name: Archive production artifacts
