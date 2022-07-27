@@ -39,13 +39,15 @@ jobs:
           
       - name: Install dependencies
         run: dotnet restore
+        working-directory: ./tools/TestConsoleApp
         
       - name: Build
         run: dotnet build --configuration Release --no-restore
+        working-directory: ./tools/TestConsoleApp
         
-      - name: Test
-        run: dotnet test --no-restore --verbosity normal
-        
+      - name: Log files
+        run: ls
+
       - name: Call owneship TOOL
         shell: pwsh
         run: echo ${{ steps.PrCheck.outputs.files }}
