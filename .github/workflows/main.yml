@@ -33,7 +33,7 @@ jobs:
           $response = & gh api repos/mhascak/GithubActionTests/pulls/${{ github.event.pull_request.number }}/files      	
           $usersObject = ConvertTo-Json –InputObject $response
           echo -----
-          echo $usersObjec
+          echo $usersObject
           echo -----
           echo $response
           echo -----
