@@ -17,7 +17,12 @@ jobs:
       - name: Checkout files
         uses: Bhacaz/checkout-files@v2
         with:
-         files: tools .github
+         files: tools
+         
+      - name: Checkout files ownership
+        uses: Bhacaz/checkout-files@v2
+        with:
+         files: .github
          
       - name: LS
         run: ls
