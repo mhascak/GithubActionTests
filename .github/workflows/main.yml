@@ -34,7 +34,7 @@ jobs:
           $usersObject = ConvertFrom-Json –InputObject $response
           $changedFiles = $usersObject | select -ExpandProperty filename
           echo $changedFiles
-          echo ::set-output name=files::$changedFiles
+          echo "::set-output name=files::${changedFiles}"
         
       - name: Files for ownership report
         shell: pwsh
