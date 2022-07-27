@@ -26,19 +26,10 @@ jobs:
           echo $changedFiles
           echo "::set-output name=files::${changedFiles}"
         
-      - name: Files for ownership report
-        shell: pwsh
-        run: echo ${{ steps.PrCheck.outputs.files }}
-        continue-on-error: false
-        
       - name: Call owneship TOOL
         shell: pwsh
         run: echo ${{ steps.PrCheck.outputs.files }}
         continue-on-error: false
-
-      - name: Set variable if doesn't exit
-        shell: pwsh
-        run: echo steps.PrCheck.outputs
 
       - name: List files
         run: ls
