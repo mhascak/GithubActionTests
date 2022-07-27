@@ -47,6 +47,7 @@ jobs:
         working-directory: ./tools/TestConsoleApp/TestConsoleApp/bin/Release/net6.0/
         
       - name: Run owneship TOOL
+        id: CodeOwnersParser
         shell: pwsh
         run: |
           echo github.workspace
