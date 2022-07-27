@@ -32,7 +32,12 @@ jobs:
         run: |
           $response = & gh api repos/mhascak/GithubActionTests/pulls/${{ github.event.pull_request.number }}/files      	
           $usersObject = ConvertFrom-Json –InputObject $response
-          echo $usersObject
+          echo "-----"
+          echo "${{ $usersObject }}"
+          echo "-----"
+          echo "${{ $response }}"
+          echo "-----"
+          echo "{Hotovo}" >> $GITHUB_STEP_SUMMARY
         
       - name: Set variable if doesn't exit
         shell: pwsh
