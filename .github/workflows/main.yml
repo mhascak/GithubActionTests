@@ -18,6 +18,9 @@ jobs:
         uses: Bhacaz/checkout-files@v2
         with:
          files: tools
+         
+      - name: Log files
+        run: ls
 
       - name: Get PR Files
         id: PrCheck
