@@ -17,7 +17,7 @@ jobs:
       - name: Checkout files
         uses: Bhacaz/checkout-files@v2
         with:
-         files: tools .github/test.txt
+         files: tools .github
          
       - name: LS
         run: ls
