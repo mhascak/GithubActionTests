@@ -38,7 +38,7 @@ jobs:
         
       - name: Files for ownership report
         shell: pwsh
-        run: echo steps.PrCheck.outputs.files
+        run: echo ${{ steps.PrCheck.outputs.files }}
         continue-on-error: false
 
       - name: Set variable if doesn't exit
