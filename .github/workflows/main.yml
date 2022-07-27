@@ -49,11 +49,10 @@ jobs:
       - name: Run owneship TOOL
         shell: pwsh
         run: |
-          echo $env:GITHUB_ACTION_PATH
-          $output = & $env:GITHUB_ACTION_PATH/TestConsoleApp > output.txt
+          echo github.workspace
+          $output = & ${{ github.workspace }}/tools/TestConsoleApp/TestConsoleApp/bin/Release/net6.0/TestConsoleApp > output.txt
           echo $output
         continue-on-error: false
-        working-directory: ./tools/TestConsoleApp/TestConsoleApp/bin/Release/net6.0/
 
       - name: Archive production artifacts
         uses: actions/upload-artifact@v3
