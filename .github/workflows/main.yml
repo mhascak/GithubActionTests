@@ -29,7 +29,7 @@ jobs:
         id: PrCheck
         shell: pwsh
         run: |
-          echo ::set-output name=files::$(gh api repos/mhascak/GithubActionTests/pulls/${{ github.event.pull_request.number }}/files)
+          echo gh api repos/mhascak/GithubActionTests/pulls/${{ github.event.pull_request.number }}/files
         # The API returns a non-terminating error and the GH workflows are presetting non-terminating
         # errors to terminating.
         continue-on-error: true
