@@ -66,7 +66,7 @@ jobs:
           body-includes: 'Notifying code owners: '
           
       - name: LS
-        run: echo ${ steps.CodeOwnersParser.outputs.owners }
+        run: echo ${{ steps.CodeOwnersParser.outputs.owners }}
       
       #If no existing comment exists create a new one if there were any owners found
       - name: Create new comment
