@@ -6,7 +6,8 @@ on:
     
 env:
   MY_GITHUB_TOKEN: ${{ secrets.ACTIONS_TOKEN }}
-
+  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  
 jobs:
   notify-comment:
 
