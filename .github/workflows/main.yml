@@ -45,7 +45,7 @@ jobs:
       - name: Run owneship TOOL
         shell: pwsh
         run: |
-          ecgo ${{ steps.PrCheck.outputs.files }} || TestConsoleApp.exe
+          echo ${{ steps.PrCheck.outputs.files }} || TestConsoleApp.exe
         continue-on-error: false
         working-directory: ./tools/TestConsoleApp/TestConsoleApp/bin/Release/net6.0/
 
