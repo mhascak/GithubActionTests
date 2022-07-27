@@ -42,10 +42,14 @@ jobs:
         run: dotnet build --configuration Release --no-restore
         working-directory: ./tools/TestConsoleApp
         
+      - name: LS
+        run: ls
+        working-directory: ./tools/TestConsoleApp/TestConsoleApp/bin/Release/net6.0/
+        
       - name: Run owneship TOOL
         shell: pwsh
         run: |
-          echo ${{ steps.PrCheck.outputs.files }} | ./TestConsoleApp.exe > output.txt
+          TestConsoleApp.exe > output.txt
         continue-on-error: false
         working-directory: ./tools/TestConsoleApp/TestConsoleApp/bin/Release/net6.0/
 
