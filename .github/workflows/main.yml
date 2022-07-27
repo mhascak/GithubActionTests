@@ -1,9 +1,6 @@
 name: tooling-be.ownership-comment
 # Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the "main" branch
-  push:
-    branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
     
@@ -32,7 +29,7 @@ jobs:
         id: PrCheck
         shell: pwsh
         run: |
-          echo ::set-output name=files::$(gh api repos/MewsSystems/mews/pulls/${{ github.event.pull_request.number }}/files)
+          echo ::set-output name=files::$(gh api repos/mhascak/GithubActionTests/pulls/${{ github.event.pull_request.number }}/files)
         # The API returns a non-terminating error and the GH workflows are presetting non-terminating
         # errors to terminating.
         continue-on-error: true
