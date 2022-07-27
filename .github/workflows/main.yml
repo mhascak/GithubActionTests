@@ -46,7 +46,7 @@ jobs:
         id: CodeOwnersParser
         shell: pwsh
         run: |
-          $output = $(${{ github.workspace }}/tools/TestConsoleApp/TestConsoleApp/bin/Release/net6.0/TestConsoleApp)
+          $output = & ${{ github.workspace }}/tools/TestConsoleApp/TestConsoleApp/bin/Release/net6.0/TestConsoleApp
           echo "::set-output name=owners::${$output}"
         continue-on-error: false
 
