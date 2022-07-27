@@ -37,7 +37,6 @@ jobs:
           echo "-----"
           echo "${{ $response }}"
           echo "-----"
-          echo "{Hotovo}" >> $GITHUB_STEP_SUMMARY
         
       - name: Set variable if doesn't exit
         shell: pwsh
