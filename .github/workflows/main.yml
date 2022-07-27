@@ -7,6 +7,7 @@ on:
 env:
   MY_GITHUB_TOKEN: ${{ secrets.ACTIONS_TOKEN }}
   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  DOTNET_VERSION: '6.0.x'
   
 jobs:
   notify-comment:
@@ -24,7 +25,21 @@ jobs:
           $usersObject = ConvertFrom-Json –InputObject $response
           $changedFiles = $usersObject | select -ExpandProperty filename
           echo $changedFiles
-          echo "::set-output name=files::${changedFiles}"
+          echo "::set-output name=files::${changedFiles}")
+          
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+          
+      - name: Install dependencies
+        run: dotnet restore
+        
+      - name: Build
+        run: dotnet build --configuration Release --no-restore
+        
+      - name: Test
+        run: dotnet test --no-restore --verbosity normal
         
       - name: Call owneship TOOL
         shell: pwsh
