@@ -49,7 +49,7 @@ jobs:
       - name: Run owneship TOOL
         shell: pwsh
         run: |
-          $output = ${{ $env:GITHUB_ACTION_PATH }}\TestConsoleApp > output.txt
+          $output = & $env:GITHUB_ACTION_PATH\TestConsoleApp > output.txt
           echo $output
         continue-on-error: false
         working-directory: ./tools/TestConsoleApp/TestConsoleApp/bin/Release/net6.0/
