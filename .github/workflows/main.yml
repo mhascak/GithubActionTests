@@ -29,7 +29,10 @@ jobs:
       - name: Get PR Files
         id: PrCheck
         shell: pwsh
-        run: gh api repos/mhascak/GithubActionTests/pulls/${{ github.event.pull_request.number }}/files
+        run: |
+          $response = & gh api repos/mhascak/GithubActionTests/pulls/${{ github.event.pull_request.number }}/files      	
+          $usersObject = ConvertFrom-Json –InputObject $response
+          echo $usersObject
         
       - name: Set variable if doesn't exit
         shell: pwsh
