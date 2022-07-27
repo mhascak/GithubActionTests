@@ -45,12 +45,16 @@ jobs:
       - name: Run owneship TOOL
         shell: pwsh
         run: |
-          echo ${{ steps.PrCheck.outputs.files }} || TestConsoleApp.exe
+          echo ${{ steps.PrCheck.outputs.files }} | TestConsoleApp.exe > output.txt
         continue-on-error: false
         working-directory: ./tools/TestConsoleApp/TestConsoleApp/bin/Release/net6.0/
 
-      - name: List files
-        run: ls
+      - name: Archive production artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: pull-request-changes
+          path: output.txt
+          if-no-files-found: warn
 #
 #      - name: CodeOwnersParser
 #        id: CodeOwnersParser
