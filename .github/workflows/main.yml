@@ -34,10 +34,11 @@ jobs:
           $usersObject = ConvertFrom-Json –InputObject $response
           $changedFiles = $usersObject | select -ExpandProperty filename
           echo $changedFiles
+          echo ::set-output name=files::$changedFiles
         
-      - name: Set variable if doesn't exit
+      - name: Files for ownership report
         shell: pwsh
-        run: echo steps.PrCheck.outputs
+        run: echo steps.PrCheck.outputs.files
         continue-on-error: false
 
       - name: Set variable if doesn't exit
