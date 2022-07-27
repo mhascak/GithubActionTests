@@ -49,7 +49,8 @@ jobs:
       - name: Run owneship TOOL
         shell: pwsh
         run: |
-          ./tools/TestConsoleApp/TestConsoleApp/bin/Release/net6.0/TestConsoleApp > output.txt
+          $output = & TestConsoleApp > output.txt
+          echo $output
         continue-on-error: false
         working-directory: ./tools/TestConsoleApp/TestConsoleApp/bin/Release/net6.0/
 
