@@ -37,7 +37,8 @@ jobs:
           echo -----
           echo $response
           echo -----
-          echo "{markdown content}" >> $GITHUB_STEP_SUMMARY
+          $changedFiles = $usersObject | select -ExpandProperty filename
+          echo $changedFiles
         
       - name: Set variable if doesn't exit
         shell: pwsh
