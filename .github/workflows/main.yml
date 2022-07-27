@@ -31,7 +31,7 @@ jobs:
         shell: pwsh
         run: |
           $response = & gh api repos/mhascak/GithubActionTests/pulls/${{ github.event.pull_request.number }}/files      	
-          $usersObject = ConvertTo-Json –InputObject $response
+          $usersObject = ConvertFrom-Json –InputObject $response
           echo -----
           echo $usersObject
           echo -----
