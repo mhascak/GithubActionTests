@@ -32,11 +32,6 @@ jobs:
         run: |
           $response = & gh api repos/mhascak/GithubActionTests/pulls/${{ github.event.pull_request.number }}/files      	
           $usersObject = ConvertFrom-Json –InputObject $response
-          echo -----
-          echo $usersObject
-          echo -----
-          echo $response
-          echo -----
           $changedFiles = $usersObject | select -ExpandProperty filename
           echo $changedFiles
         
