@@ -47,7 +47,7 @@ jobs:
         shell: pwsh
         run: |
           $output = & ${{ github.workspace }}/tools/TestConsoleApp/TestConsoleApp/bin/Release/net6.0/TestConsoleApp
-          echo "::set-output name=owners::'dddd5555'"
+          echo "::set-output name=owners::'Notifying code owners: ffff'"
         continue-on-error: false
 
       - name: Archive production artifacts
