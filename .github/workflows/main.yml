@@ -24,8 +24,14 @@ jobs:
         with:
          files: .github
          
+      - name: Checkout
+        uses: actions/checkout@v2.4.2
+         
       - name: LS
-        run: ls
+        run: |
+         echo ${{ github.workspace }}/.github/CODEOWNERS
+         tree -d
+         cat ${{ github.workspace }}/.github/CODEOWNERS
 
       - name: Get PR Files
         id: PrCheck
