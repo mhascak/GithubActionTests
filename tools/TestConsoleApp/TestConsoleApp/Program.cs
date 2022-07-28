@@ -5,8 +5,8 @@ using System.Text.RegularExpressions;
 
 Console.WriteLine("Hello, World!");
 Console.WriteLine(Assembly.GetExecutingAssembly().Location);
-Console.WriteLine(GetCodeBaseRootPath());
-Console.WriteLine(NormalizeSearchPath("tools/test.cs"));
+//Console.WriteLine(GetCodeBaseRootPath());
+//Console.WriteLine(NormalizeSearchPath("tools/test.cs"));
 
 static string GetCodeBaseRootPath()
 {
