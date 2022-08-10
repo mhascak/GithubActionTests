@@ -9,6 +9,11 @@ sb.AppendLine("Markdown");
 sb.AppendLine("- [ ]  Test 1");
 sb.AppendLine("- [ ]  Test 2");
 sb.AppendLine("- [ ]  " + Assembly.GetExecutingAssembly().Location);
+sb.AppendLine();
+sb.AppendLine("Markdown 2");
+sb.AppendLine("- [ ]  Test 1");
+sb.AppendLine("- [ ]  Test 2");
+sb.AppendLine("- [ ]  " + Assembly.GetExecutingAssembly().Location);
 
 var result = sb.ToString();
 Console.WriteLine(result);
