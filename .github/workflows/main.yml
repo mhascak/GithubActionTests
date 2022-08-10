@@ -5,6 +5,7 @@ on:
     branches: [ "main" ]
     
 env:
+  CODEOWNER_SEARCH_COMMENT_PREFIX: 'Notifying code owners:'
   MY_GITHUB_TOKEN: ${{ secrets.ACTIONS_TOKEN }}
   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   DOTNET_VERSION: '6.0.x'
@@ -72,7 +73,7 @@ jobs:
         with:
           issue-number: ${{ github.event.number }}
           comment-author: 'github-actions[bot]'
-          body-includes: 'Notifying code owners: '
+          body-includes: ${{ env.CODEOWNER_SEARCH_COMMENT_PREFIX }}
       
       #If no existing comment exists create a new one if there were any owners found
       - name: Create new comment
@@ -81,7 +82,7 @@ jobs:
         with:
           issue-number: ${{ github.event.number }}
           body: |
-            **Notifying code owners:**
+            **${{ env.CODEOWNER_SEARCH_COMMENT_PREFIX }}**
             ${{ steps.CodeOwnersParser.outputs.owners }}
       
       #If existing comment was found replace it
@@ -92,5 +93,5 @@ jobs:
           comment-id: ${{ steps.find-comment.outputs.comment-id }}
           edit-mode: replace
           body: |
-            **Notifying code owners:**
+            **${{ env.CODEOWNER_SEARCH_COMMENT_PREFIX }}**
             ${{ steps.CodeOwnersParser.outputs.owners }}
