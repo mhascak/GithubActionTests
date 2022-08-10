@@ -2,9 +2,19 @@
 
 using System.Reflection;
 using System.Text.RegularExpressions;
+using System.Text;
 
-Console.WriteLine("Hello, World!");
-Console.WriteLine(Assembly.GetExecutingAssembly().Location);
+var sb = new StringBuilder();
+sb.AppendLine(result.Key);
+    
+sb.AppendLine("Markdown");
+sb.AppendLine("- []  Test 1");
+sb.AppendLine("- []  Test 2");
+sb.AppendLine("- []  " + Assembly.GetExecutingAssembly().Location);
+
+var result = sb.ToString();
+Console.WriteLine(result);
+
 //Console.WriteLine(GetCodeBaseRootPath());
 //Console.WriteLine(NormalizeSearchPath("tools/test.cs"));
 
