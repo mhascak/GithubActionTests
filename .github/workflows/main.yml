@@ -13,7 +13,7 @@ env:
 jobs:
   notify-comment:
 
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout files
         uses: Bhacaz/checkout-files@v2
