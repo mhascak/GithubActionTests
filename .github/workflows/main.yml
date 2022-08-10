@@ -61,8 +61,8 @@ jobs:
         shell: pwsh
         run: |
           $output = & ${{ github.workspace }}/tools/TestConsoleApp/TestConsoleApp/bin/Release/net6.0/TestConsoleApp > output.txt
-          $reportData = (Get-Content ${{ github.workspace }}/output.txt)
-          echo "::set-output name=owners::'Notifying code owners: ${reportData}'"
+          $reportData = (Get-Content ${{ github.workspace }}/output.txt) -join "%0A"
+          echo "::set-output name=owners::${reportData}
         continue-on-error: false
 
       - name: Archive production artifacts
@@ -90,6 +90,7 @@ jobs:
         with:
           issue-number: ${{ github.event.number }}
           body: |
+            **Notifying code owners:**
             ${{ steps.CodeOwnersParser.outputs.owners }}
       
       #If existing comment was found replace it
@@ -100,4 +101,5 @@ jobs:
           comment-id: ${{ steps.find-comment.outputs.comment-id }}
           edit-mode: replace
           body: |
+            **Notifying code owners:**
             ${{ steps.CodeOwnersParser.outputs.owners }}
