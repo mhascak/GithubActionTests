@@ -56,7 +56,7 @@ jobs:
         run: |
           $output = & ${{ github.workspace }}/tools/TestConsoleApp/TestConsoleApp/bin/Release/net6.0/TestConsoleApp > output.txt
           $reportData = (Get-Content ${{ github.workspace }}/output.txt) -join "%0A"
-          echo "::set-output name=owners::${reportData}
+          echo "::set-output name=owners::${reportData}"
         continue-on-error: false
 
       - name: Archive production artifacts
