@@ -5,8 +5,6 @@ using System.Text.RegularExpressions;
 using System.Text;
 
 var sb = new StringBuilder();
-sb.AppendLine(result.Key);
-    
 sb.AppendLine("Markdown");
 sb.AppendLine("- []  Test 1");
 sb.AppendLine("- []  Test 2");
