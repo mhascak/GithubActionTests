@@ -6,9 +6,9 @@ using System.Text;
 
 var sb = new StringBuilder();
 sb.AppendLine("Markdown");
-sb.AppendLine("- []  Test 1");
-sb.AppendLine("- []  Test 2");
-sb.AppendLine("- []  " + Assembly.GetExecutingAssembly().Location);
+sb.AppendLine("- [ ]  Test 1");
+sb.AppendLine("- [ ]  Test 2");
+sb.AppendLine("- [ ]  " + Assembly.GetExecutingAssembly().Location);
 
 var result = sb.ToString();
 Console.WriteLine(result);
