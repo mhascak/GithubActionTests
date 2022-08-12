@@ -50,7 +50,9 @@ jobs:
           
       - name: LS
         shell: pwsh
-        run: tree
+        run: |
+          tree
+          cat .github/CODEOWNERS
           
       - name: git
         run: |
