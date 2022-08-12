@@ -37,11 +37,14 @@ jobs:
           git init $GITHUB_WORKSPACE
           git remote add origin https://github.com/$GITHUB_REPOSITORY
           git config --local gc.auto 0
+          
           # Now interesting part
           git config core.sparseCheckout true
+          
           # Add here contents of sparse-checkout line by line
           echo "tools" >> .git/info/sparse-checkout
-          # echo ... 
+          echo ".github" >> .git/info/sparse-checkout
+
           git -c protocol.version=2 fetch --no-tags --prune --progress --depth=10 origin +${GITHUB_SHA}:refs/remotes/origin/${BRANCH}
           git checkout --progress --force -B $BRANCH refs/remotes/origin/$BRANCH
           
