@@ -16,20 +16,10 @@ jobs:
 
     runs-on: ubuntu-latest
     steps:
-    
-      - name: Source brach name
-        run: echo '${{ env.BRANCH_NAME }}'
-    
       - name: Checkout files
         uses: Bhacaz/checkout-files@v2
         with:
-         files: tools
-         branch: ${{ env.BRANCH_NAME }}
-         
-      - name: Checkout files ownership
-        uses: Bhacaz/checkout-files@v2
-        with:
-         files: .github
+         files: tools .github
          
       - name: LS
         run: ls
@@ -43,11 +33,7 @@ jobs:
           $changedFiles = $usersObject | select -ExpandProperty filename
           echo $changedFiles
           echo "::set-output name=files::${changedFiles}"
-          
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: ${{ env.DOTNET_VERSION }}
+        
           
       - name: Install dependencies
         run: dotnet restore
@@ -65,13 +51,6 @@ jobs:
           $reportData = (Get-Content ${{ github.workspace }}/output.txt) -join "%0A"
           echo "::set-output name=owners::${reportData}"
         continue-on-error: false
-
-      - name: Archive production artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: pull-request-changes
-          path: output.txt
-          if-no-files-found: warn
 
       - name: Check if already commented
         uses: peter-evans/find-comment@v1
