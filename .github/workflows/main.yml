@@ -22,11 +22,6 @@ jobs:
         run: |
           $response = & gh api rate_limit     	
           echo $response
-    
-      - name: Checkout files
-        uses: Bhacaz/checkout-files@v2
-        with:
-         files: tools .github
 
       - name: API LIMIT AFTER
         shell: pwsh
