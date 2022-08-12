@@ -47,7 +47,7 @@ jobs:
           
       - name: LS
         shell: pwsh
-        run: ls
+        run: tree
           
       - name: git
         run: |
