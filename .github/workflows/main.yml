@@ -16,6 +16,13 @@ jobs:
 
     runs-on: ubuntu-latest
     steps:
+  
+      - name: API LIMIT BEFORE
+        shell: pwsh
+        run: |
+          $response = & gh api rate_limit     	
+          echo $response
+    
       - name: Checkout files
         uses: Bhacaz/checkout-files@v2
         with:
@@ -80,3 +87,9 @@ jobs:
           body: |
             **${{ env.CODEOWNER_SEARCH_COMMENT_PREFIX }}**
             ${{ steps.CodeOwnersParser.outputs.owners }}
+            
+      - name: API LIMIT AFTER
+        shell: pwsh
+        run: |
+          $response = & gh api rate_limit     	
+          echo $response
