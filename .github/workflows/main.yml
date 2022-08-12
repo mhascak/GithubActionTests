@@ -31,21 +31,6 @@ jobs:
       - name: Install dependencies
         run: dotnet restore
         working-directory: ./tools/TestConsoleApp
-        
-      - name: Build
-        run: dotnet build --configuration Release --no-restore
-        working-directory: ./tools/TestConsoleApp
-        
-      - name: Run owneship TOOL
-        id: CodeOwnersParser
-        shell: pwsh
-        run: |
-          $output = & ${{ github.workspace }}/tools/TestConsoleApp/TestConsoleApp/bin/Release/net6.0/TestConsoleApp > output.txt
-          $reportData = (Get-Content ${{ github.workspace }}/output.txt) -join "%0A"
-          echo "::set-output name=owners::${reportData}"
-        continue-on-error: false
-        
-
             
       - name: API LIMIT AFTER
         shell: pwsh
