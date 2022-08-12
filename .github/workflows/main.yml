@@ -29,9 +29,11 @@ jobs:
           git --version
           git config user.name 'mhascak'
           git config user.email 'martinhascak@gmail.com'
+          
+          git clone --filter=blob:none --sparse
+          git sparse-checkout add tools
+          
           git status
-          git tag
-          git describe
 
       - name: API LIMIT AFTER
         shell: pwsh
