@@ -31,7 +31,7 @@ jobs:
           git config user.name 'mhascak'
           git config user.email 'martinhascak@gmail.com'
           
-          git clone --filter=blob:none --sparse
+          git clone --filter=blob:none --sparse git@github.com:mhascak/GithubActionTests.git
           git sparse-checkout add tools
           
           git status
