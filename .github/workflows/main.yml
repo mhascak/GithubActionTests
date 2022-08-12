@@ -28,10 +28,6 @@ jobs:
         with:
          files: tools .github
 
-      - name: Install dependencies
-        run: dotnet restore
-        working-directory: ./tools/TestConsoleApp
-            
       - name: API LIMIT AFTER
         shell: pwsh
         run: |
