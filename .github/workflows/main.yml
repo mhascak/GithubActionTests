@@ -9,16 +9,22 @@ env:
   MY_GITHUB_TOKEN: ${{ secrets.ACTIONS_TOKEN }}
   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   DOTNET_VERSION: '6.0.x'
+  BRANCH_NAME: ${{ github.head_ref || github.ref_name }} 
   
 jobs:
   notify-comment:
 
     runs-on: ubuntu-latest
     steps:
+    
+      - name: Source brach name
+        run: echo '${{ env.BRANCH_NAME }}'
+    
       - name: Checkout files
         uses: Bhacaz/checkout-files@v2
         with:
          files: tools
+         branch: ${{ env.BRANCH_NAME }}
          
       - name: Checkout files ownership
         uses: Bhacaz/checkout-files@v2
