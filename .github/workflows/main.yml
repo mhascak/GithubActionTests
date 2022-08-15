@@ -28,7 +28,7 @@ jobs:
         run: |
           REPO="https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
           BRANCH="${GITHUB_REF/#refs\/heads\//}"
-          echo BRANCH
+          echo "${GITHUB_REF/#refs\/heads\//}"
           echo "${GITHUB_SHA}:refs/remotes/origin/${BRANCH}"
           
       - name: Partial Clone
