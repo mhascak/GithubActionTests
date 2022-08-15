@@ -5,6 +5,8 @@ on:
     branches: [ "main" ]
     
 env:
+  REPO: "https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+  BRANCH: "${GITHUB_REF/#refs\/heads\//}"
   CODEOWNER_SEARCH_COMMENT_PREFIX: 'Notifying code owners:'
   MY_GITHUB_TOKEN: ${{ secrets.ACTIONS_TOKEN }}
   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -26,45 +28,46 @@ jobs:
       - name: Sparse checkout
         shell: bash
         run: |
-          REPO="https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
-          BRANCH="${GITHUB_REF/#refs\/heads\//}"
           echo "${GITHUB_REF/#refs\/heads\//}"
           echo "${GITHUB_SHA}:refs/remotes/origin/${BRANCH}"
           
       - name: Partial Clone
         run: |
-          REPO="https://${GITHUB_ACTOR}:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git"
-          BRANCH="${GITHUB_REF/#refs\/heads\//}"
-          git clone --filter=blob:none --no-checkout --depth 10  --sparse $REPO .
-          git -c protocol.version=2 fetch --no-tags --prune --progress --depth=10 origin +${GITHUB_SHA}:refs/remotes/origin/${BRANCH}
+          git clone --filter=blob:none --no-checkout --depth 10  --sparse ${{ env.REPO }} ./repo/tool
+          cd ./repo/tool
           git sparse-checkout set --cone
-          git sparse-checkout add "tools" ".github"
+          git sparse-checkout add "tools"
           git checkout
-          cat .github/CODEOWNERS
-          git status
-          git checkout --progress --force -B $BRANCH refs/remotes/origin/$BRANCH
-          git status
+          
+      - name: Partial Clone current branch Ownership File
+        run: |
+          git clone --filter=blob:none --no-checkout --depth 10  --sparse ${{ env.REPO }} ./repo
+          cd ./repo
+          git -c protocol.version=2 fetch --no-tags --prune --progress --depth=10 origin +${GITHUB_SHA}:refs/remotes/origin/${{ env.BRANCH }}
+          git sparse-checkout set --cone
+          git sparse-checkout add ".github"
+          git checkout --progress --force -B ${{ env.BRANCH }} refs/remotes/origin/${{ env.BRANCH }}
           cat .github/CODEOWNERS
           
       - name: LS
         shell: pwsh
         run: |
           tree
-          cat .github/CODEOWNERS
+          cat ./repo/.github/CODEOWNERS
           
       - name: Install dependencies
         run: dotnet restore
-        working-directory: ./tools/TestConsoleApp
+        working-directory: ./repo/tool/tools/TestConsoleApp
         
       - name: Build
         run: dotnet build --configuration Release --no-restore
-        working-directory: ./tools/TestConsoleApp
+        working-directory: ./repo/tool/tools/TestConsoleApp
         
       - name: Run owneship TOOL
         id: CodeOwnersParser
         shell: pwsh
         run: |
-          $output = & ${{ github.workspace }}/tools/TestConsoleApp/TestConsoleApp/bin/Release/net6.0/TestConsoleApp > output.txt
+          $output = & ${{ github.workspace }}/repo/tool/tools/TestConsoleApp/TestConsoleApp/bin/Release/net6.0/TestConsoleApp > output.txt
           $reportData = (Get-Content ${{ github.workspace }}/output.txt) -join "%0A"
           echo "::set-output name=owners::${reportData}"
         continue-on-error: false
