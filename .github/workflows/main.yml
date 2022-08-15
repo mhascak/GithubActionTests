@@ -34,10 +34,13 @@ jobs:
       - name: Partial Clone
         run: |
           REPO="https://${GITHUB_ACTOR}:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git"
-          git clone --filter=blob:none --no-checkout --depth 1  --sparse $REPO .
+          git clone --filter=blob:none --no-checkout --depth 10  --sparse $REPO .
+          git -c protocol.version=2 fetch --no-tags --prune --progress --depth=10 origin +${GITHUB_SHA}:refs/remotes/origin/${BRANCH}
           git sparse-checkout set --cone
           git sparse-checkout add "tools" ".github"
           git checkout
+          git status
+          git checkout --progress --force -B $BRANCH refs/remotes/origin/$BRANCH
           git status
           
       - name: LS
