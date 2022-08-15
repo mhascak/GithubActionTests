@@ -5,8 +5,8 @@ on:
     branches: [ "main" ]
     
 env:
-  REPO: "https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
-  BRANCH: "${GITHUB_REF/#refs\/heads\//}"
+  REPO: 'https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git'
+  BRANCH: '${GITHUB_REF/#refs\/heads\//}'
   CODEOWNER_SEARCH_COMMENT_PREFIX: 'Notifying code owners:'
   MY_GITHUB_TOKEN: ${{ secrets.ACTIONS_TOKEN }}
   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
