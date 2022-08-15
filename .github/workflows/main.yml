@@ -38,19 +38,6 @@ jobs:
           tree
           cat .github/CODEOWNERS
           
-      - name: git
-        run: |
-          # setup the username and email. I tend to use 'GitHub Actions Bot' with no email by default
-          git init
-          git --version
-          git config user.name 'mhascak'
-          git config user.email 'martinhascak@gmail.com'
-          
-          git clone --filter=blob:none --sparse git@github.com:mhascak/GithubActionTests.git
-          git sparse-checkout add tools
-          
-          git status
-          
       - name: Install dependencies
         run: dotnet restore
         working-directory: ./tools/TestConsoleApp
