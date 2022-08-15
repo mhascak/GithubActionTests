@@ -50,6 +50,53 @@ jobs:
           git sparse-checkout add tools
           
           git status
+          
+      - name: Install dependencies
+        run: dotnet restore
+        working-directory: ./tools/TestConsoleApp
+        
+      - name: Build
+        run: dotnet build --configuration Release --no-restore
+        working-directory: ./tools/TestConsoleApp
+        
+      - name: Run owneship TOOL
+        id: CodeOwnersParser
+        shell: pwsh
+        run: |
+          $output = & ${{ github.workspace }}/tools/TestConsoleApp/TestConsoleApp/bin/Release/net6.0/TestConsoleApp > output.txt
+          $reportData = (Get-Content ${{ github.workspace }}/output.txt) -join "%0A"
+          echo "::set-output name=owners::${reportData}"
+        continue-on-error: false
+        
+      - name: Check if already commented
+        uses: peter-evans/find-comment@v1
+        id: find-comment
+        with:
+          issue-number: ${{ github.event.number }}
+          comment-author: 'github-actions[bot]'
+          body-includes: ${{ env.CODEOWNER_SEARCH_COMMENT_PREFIX }}
+      
+      #If no existing comment exists create a new one if there were any owners found
+      - name: Create new comment
+        if: steps.find-comment.outputs.comment-id == '' && steps.CodeOwnersParser.outputs.owners != ''
+        uses: peter-evans/create-or-update-comment@v1
+        with:
+          issue-number: ${{ github.event.number }}
+          body: |
+            **${{ env.CODEOWNER_SEARCH_COMMENT_PREFIX }}**
+            ${{ steps.CodeOwnersParser.outputs.owners }}
+      
+      #If existing comment was found replace it
+      - name: Update existing comment
+        if: steps.find-comment.outputs.comment-id != '' && steps.CodeOwnersParser.outputs.owners != ''
+        uses: peter-evans/create-or-update-comment@v1
+        with:
+          comment-id: ${{ steps.find-comment.outputs.comment-id }}
+          edit-mode: replace
+          body: |
+            **${{ env.CODEOWNER_SEARCH_COMMENT_PREFIX }}**
+            ${{ steps.CodeOwnersParser.outputs.owners }}
+
 
       - name: API LIMIT AFTER
         shell: pwsh
