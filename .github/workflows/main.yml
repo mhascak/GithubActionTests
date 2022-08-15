@@ -30,6 +30,7 @@ jobs:
           git sparse-checkout init --cone
           git sparse-checkout add "tools" ".github"
           git checkout
+          git status
           
       - name: LS
         shell: pwsh
