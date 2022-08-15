@@ -23,6 +23,14 @@ jobs:
           $response = & gh api rate_limit     	
           echo $response
           
+      - name: Sparse checkout
+        shell: bash
+        run: |
+          REPO="https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          BRANCH="${GITHUB_REF/#refs\/heads\//}"
+          echo BRANCH
+          echo "${GITHUB_SHA}:refs/remotes/origin/${BRANCH}"
+          
       - name: Partial Clone
         run: |
           REPO="https://${GITHUB_ACTOR}:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git"
