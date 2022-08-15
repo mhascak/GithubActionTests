@@ -40,9 +40,11 @@ jobs:
           git sparse-checkout set --cone
           git sparse-checkout add "tools" ".github"
           git checkout
+          cat .github/CODEOWNERS
           git status
           git checkout --progress --force -B $BRANCH refs/remotes/origin/$BRANCH
           git status
+          cat .github/CODEOWNERS
           
       - name: LS
         shell: pwsh
