@@ -36,7 +36,7 @@ jobs:
           git clone --filter=blob:none --no-checkout --depth 10  --sparse ${{ env.REPO }} ./repo-tool
           cd ./repo-tool
           git sparse-checkout set --cone
-          git sparse-checkout add "tools"
+          git sparse-checkout add "tools" ".github"
           git checkout
           
       - name: Partial Clone current branch Ownership File
@@ -52,7 +52,7 @@ jobs:
       - name: LS
         shell: pwsh
         run: |
-          tree
+          cat ./repo-tool/.github/CODEOWNERS
           cat ./repo-github/.github/CODEOWNERS
           
       - name: Install dependencies
