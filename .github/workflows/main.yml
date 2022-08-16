@@ -24,6 +24,9 @@ jobs:
         run: |
           $response = & gh api rate_limit     	
           echo $response
+          echo ${{ env.BRANCH }}
+          echo ${{ env.REPO }}
+          echo ${{ github.repository }}
           
       - name: Sparse checkout
         shell: bash
