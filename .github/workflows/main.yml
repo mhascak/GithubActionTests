@@ -22,8 +22,6 @@ jobs:
       - name: API LIMIT BEFORE
         shell: pwsh
         run: |
-          $response = & gh api rate_limit     
-          BRANCH="${GITHUB_REF/#refs\/heads\//}"
           echo $BRANCH
           echo "-----------"
           echo $response
