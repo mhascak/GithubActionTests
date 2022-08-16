@@ -35,10 +35,11 @@ jobs:
           echo ${{ github.SHA }}
           
       - name: Sparse checkout
+        shell: bash
         run: |
           BRANCH="${GITHUB_REF/#refs\/heads\//}"
           echo "${GITHUB_REF/#refs\/heads\//}"
-          echo "${GITHUB_SHA}:refs/remotes/origin/$BRANCH
+          echo "${GITHUB_SHA}:refs/remotes/origin/$BRANCH"
           
       - name: Partial Clone
         run: |
