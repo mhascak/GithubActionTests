@@ -22,7 +22,12 @@ jobs:
       - name: API LIMIT BEFORE
         shell: pwsh
         run: |
-          $response = & gh api rate_limit     	
+          $response = & gh api rate_limit     
+          SHA="${GITHUB_SHA}"
+          BRANCH="${GITHUB_REF/#refs\/heads\//}"
+          echo $SHA
+          echo $BRANCH
+          echo "-----------"
           echo $response
           echo ${{ github.ref }}
           echo ${{ github.actor }}
