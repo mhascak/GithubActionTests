@@ -23,9 +23,7 @@ jobs:
         shell: pwsh
         run: |
           $response = & gh api rate_limit     
-          SHA="${GITHUB_SHA}"
           BRANCH="${GITHUB_REF/#refs\/heads\//}"
-          echo $SHA
           echo $BRANCH
           echo "-----------"
           echo $response
