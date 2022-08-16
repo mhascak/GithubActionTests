@@ -5,77 +5,91 @@ on:
     branches: [ "main" ]
     
 env:
+  REPO: 'https://${{github.actor}}:${{secrets.GITHUB_TOKEN}}@github.com/${{github.repository}}.git'
+  BRANCH: '${github.ref/#refs\/heads\//}'
+  CODEOWNER_SEARCH_COMMENT_PREFIX: 'Notifying code owners:'
   MY_GITHUB_TOKEN: ${{ secrets.ACTIONS_TOKEN }}
   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   DOTNET_VERSION: '6.0.x'
+  BRANCH_NAME: ${{ github.head_ref || github.ref_name }} 
   
 jobs:
   notify-comment:
 
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout files
-        uses: Bhacaz/checkout-files@v2
-        with:
-         files: tools
-         
-      - name: Checkout files ownership
-        uses: Bhacaz/checkout-files@v2
-        with:
-         files: .github
-         
-      - name: LS
-        run: ls
-
-      - name: Get PR Files
-        id: PrCheck
+  
+      - name: API LIMIT BEFORE
         shell: pwsh
         run: |
-          $response = & gh api repos/mhascak/GithubActionTests/pulls/${{ github.event.pull_request.number }}/files      	
-          $usersObject = ConvertFrom-Json –InputObject $response
-          $changedFiles = $usersObject | select -ExpandProperty filename
-          echo $changedFiles
-          echo "::set-output name=files::${changedFiles}"
+          echo $BRANCH
+          echo "-----------"
+          echo $response
+          echo ${{ github.ref }}
+          echo ${{ github.actor }}
+          echo ${{ secrets.GITHUB_TOKEN }}
+          echo ${{ github.repository }}
+          echo "-----------"
+          echo ${{ env.REPO }}
+          echo ${{ env.BRANCH }}
+          echo ${{ github.SHA }}
           
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: ${{ env.DOTNET_VERSION }}
+      - name: Sparse checkout
+        shell: bash
+        run: |
+          BRANCH="${GITHUB_REF/#refs\/heads\//}"
+          echo "${GITHUB_REF/#refs\/heads\//}"
+          echo "${GITHUB_SHA}:refs/remotes/origin/$BRANCH"
+          
+      - name: Partial Clone
+        run: |
+          git clone --filter=blob:none --no-checkout --depth 10  --sparse ${{ env.REPO }} ./repo-tool
+          cd ./repo-tool
+          git sparse-checkout set --cone
+          git sparse-checkout add "tools" ".github"
+          git checkout
+          
+      - name: Partial Clone current branch Ownership File
+        run: |
+          BRANCH="${GITHUB_REF/#refs\/heads\//}"
+          git clone --filter=blob:none --no-checkout --depth 10  --sparse ${{ env.REPO }} ./repo-github
+          cd ./repo-github
+          git -c protocol.version=2 fetch --no-tags --prune --progress --depth=10 origin +${{ github.SHA }}:refs/remotes/origin/${BRANCH}
+          git sparse-checkout set --cone
+          git sparse-checkout add ".github"
+          git checkout --progress --force -B $BRANCH refs/remotes/origin/$BRANCH
+          cat .github/CODEOWNERS
+          
+      - name: LS
+        shell: pwsh
+        run: |
+          cat ./repo-tool/.github/CODEOWNERS
+          cat ./repo-github/.github/CODEOWNERS
           
       - name: Install dependencies
         run: dotnet restore
-        working-directory: ./tools/TestConsoleApp
+        working-directory: ./repo-tool/tools/TestConsoleApp
         
       - name: Build
         run: dotnet build --configuration Release --no-restore
-        working-directory: ./tools/TestConsoleApp
+        working-directory: ./repo-tool/tools/TestConsoleApp
         
       - name: Run owneship TOOL
         id: CodeOwnersParser
         shell: pwsh
         run: |
-          $output = & ${{ github.workspace }}/tools/TestConsoleApp/TestConsoleApp/bin/Release/net6.0/TestConsoleApp > output.txt
-          $reportData = (Get-Content ${{ github.workspace }}/output.txt)
-          echo "::set-output name=owners::'Notifying code owners: ${reportData}'"
+          $output = & ${{ github.workspace }}/repo-tool/tools/TestConsoleApp/TestConsoleApp/bin/Release/net6.0/TestConsoleApp > output.txt
+          $reportData = (Get-Content ${{ github.workspace }}/output.txt) -join "%0A"
+          echo "::set-output name=owners::${reportData}"
         continue-on-error: false
-
-      - name: Archive production artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: pull-request-changes
-          path: output.txt
-          if-no-files-found: warn
-
+        
       - name: Check if already commented
         uses: peter-evans/find-comment@v1
         id: find-comment
         with:
           issue-number: ${{ github.event.number }}
           comment-author: 'github-actions[bot]'
-          body-includes: 'Notifying code owners: '
-          
-      - name: LS
-        run: echo ${{ steps.CodeOwnersParser.outputs.owners }}
+          body-includes: ${{ env.CODEOWNER_SEARCH_COMMENT_PREFIX }}
       
       #If no existing comment exists create a new one if there were any owners found
       - name: Create new comment
@@ -84,6 +98,7 @@ jobs:
         with:
           issue-number: ${{ github.event.number }}
           body: |
+            **${{ env.CODEOWNER_SEARCH_COMMENT_PREFIX }}**
             ${{ steps.CodeOwnersParser.outputs.owners }}
       
       #If existing comment was found replace it
@@ -94,4 +109,12 @@ jobs:
           comment-id: ${{ steps.find-comment.outputs.comment-id }}
           edit-mode: replace
           body: |
+            **${{ env.CODEOWNER_SEARCH_COMMENT_PREFIX }}**
             ${{ steps.CodeOwnersParser.outputs.owners }}
+
+
+      - name: API LIMIT AFTER
+        shell: pwsh
+        run: |
+          $response = & gh api rate_limit     	
+          echo $response
