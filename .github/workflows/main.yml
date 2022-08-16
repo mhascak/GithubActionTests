@@ -31,7 +31,7 @@ jobs:
           echo "-----------"
           echo ${{ env.REPO }}
           echo ${{ env.BRANCH }}
-          echo ${GITHUB_SHA}
+          echo ${{ github.SHA }}
           
       - name: Sparse checkout
         shell: bash
