@@ -1,0 +1,18 @@
+name: Test Workflow
+
+on:
+  workflow_dispatch:
+
+jobs:
+  log-branch-name:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Enable debug logging
+        run: echo 'ACTIONS_STEP_DEBUG=true' >> $GITHUB_ENV
+        # Enables debug mode for more detailed logs
+
+      - name: Log branch name
+        run: |
+          echo "Running workflow on branch: ${{ github.ref }}"
+          echo "Branch name extracted: $(echo ${{ github.ref }} | cut -d '/' -f 3)"
+        # Logs the full ref and then extracts just the branch name
